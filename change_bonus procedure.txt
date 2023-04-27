@@ -1,0 +1,21 @@
+create or replace procedure change_bonus(p_accid number, p_bonus number)
+is
+  -- declare variables 
+begin
+  update stage.bas_account_tbl set bonus = p_bonus
+  where account_id = p_accid;
+  
+  if sql%notfound then
+     raise_application_error(-20100,'Account Not Found');
+  else
+     commit;
+  end if;
+exception 
+  when others then
+    raise_application_error(-20111,'Error during bonus updation : ' || sqlerrm);
+end;
+
+
+calling
+===========
+execute change_bonus(115,53332000)
